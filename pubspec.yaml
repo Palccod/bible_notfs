@@ -1,0 +1,23 @@
+name: bible_notfs
+description: A Flutter app that sends daily random Bible verses and notifications.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  awesome_notifications: ^0.10.1
+  flutter:
+    sdk: flutter
+  http: ^0.13.3
+  shared_preferences: ^2.5.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/bible_verses.json
