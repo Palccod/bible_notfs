@@ -26,7 +26,7 @@
 ## 🚀 How to Use
 
 1. **Install the App:**  
-   Download and install the APK from [GitHub Releases](https://github.com/yourusername/bible_notfs/releases).
+   Download and install the APK from [GitHub Releases](https://github.com/palccod/bible_notfs/releases).
 
 2. **Open the App:**  
    On first launch, allow notification permissions when prompted.
