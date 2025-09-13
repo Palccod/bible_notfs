@@ -9,66 +9,54 @@ class NotificationService {
     }
   }
 
-  static Future<void> scheduleNotifications({
-    required Map<String, dynamic> verse,
+  static Future<void> scheduleMultipleNotifications({
+    required List<Map<String, dynamic>> verses,
     required TimeOfDay startTime,
-    required int intervalHours,
+    required int intervalMinutes,
+    int count = 7,
   }) async {
-    final verseText =
-        '${verse['book']} ${verse['chapter']}:${verse['verse']} - ${verse['text']}';
+    // Cancel all previous notifications
+    await AwesomeNotifications().cancelAll();
 
-    // Cancel previous notifications with the same id
-    await AwesomeNotifications().cancel(1);
-
-    // Calculate the first notification time
     final now = DateTime.now();
-    DateTime firstNotification = DateTime(
+    DateTime nextNotification = DateTime(
       now.year,
       now.month,
       now.day,
       startTime.hour,
       startTime.minute,
     );
-    if (firstNotification.isBefore(now)) {
-      firstNotification = firstNotification.add(const Duration(days: 1));
+    if (nextNotification.isBefore(now)) {
+      nextNotification = nextNotification.add(const Duration(days: 1));
     }
 
-    // Schedule the first notification
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 1,
-        channelKey: 'bible_channel',
-        title: 'Bible Verse',
-        body: verseText,
-        notificationLayout: NotificationLayout.Default,
-      ),
-      schedule: NotificationCalendar(
-        year: firstNotification.year,
-        month: firstNotification.month,
-        day: firstNotification.day,
-        hour: firstNotification.hour,
-        minute: firstNotification.minute,
-        second: 0,
-        millisecond: 0,
-        repeats: false,
-        timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier(),
-      ),
-    );
+    for (int i = 0; i < count && i < verses.length; i++) {
+      final verse = verses[i];
+      final verseText =
+          '${verse['book']} ${verse['chapter']}:${verse['verse']} - ${verse['text']}';
 
-    // Schedule repeating notifications at the interval
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 2,
-        channelKey: 'bible_channel',
-        title: 'Bible Verse',
-        body: verseText,
-        notificationLayout: NotificationLayout.Default,
-      ),
-      schedule: NotificationInterval(
-        interval: Duration(hours: intervalHours),
-        timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier(),
-        repeats: true,
-      ),
-    );
+      await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 100 + i, // unique id for each notification
+          channelKey: 'bible_channel',
+          title: 'Bible Verse',
+          body: verseText,
+          notificationLayout: NotificationLayout.Default,
+        ),
+        schedule: NotificationCalendar(
+          year: nextNotification.year,
+          month: nextNotification.month,
+          day: nextNotification.day,
+          hour: nextNotification.hour,
+          minute: nextNotification.minute,
+          second: 0,
+          millisecond: 0,
+          repeats: false,
+          timeZone: await AwesomeNotifications().getLocalTimeZoneIdentifier(),
+        ),
+      );
+      nextNotification =
+          nextNotification.add(Duration(minutes: intervalMinutes));
+    }
   }
 }
