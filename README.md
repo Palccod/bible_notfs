@@ -49,6 +49,9 @@
 - **Save Favourites:**  
   Mark and save your favourite verses for quick access.
 
+- **Multi-language Support**  
+  
+
 ---
 
 ## 💡 Contributing
