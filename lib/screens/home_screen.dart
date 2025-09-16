@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {},
                   ),
                   const Text(
-                    'Way Up!',
+                    'Way Up',
                     style: TextStyle(),
                   ),
                   IconButton(
